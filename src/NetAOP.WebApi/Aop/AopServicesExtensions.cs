@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
 
-namespace NetAOP.WebApi.Extensions
+namespace NetAOP.WebApi.Aop
 {
     public static class AopServicesExtensions
     {
@@ -14,7 +14,9 @@ namespace NetAOP.WebApi.Extensions
                 var proxyGenerator = serviceProvider.GetRequiredService<ProxyGenerator>();
                 var actual = serviceProvider.GetRequiredService<TImplementation>();
                 var interceptors = serviceProvider.GetServices<IInterceptor>().ToArray();
-                return proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), actual, interceptors);
+                var proxy = ProxyFactory.GetProxiedInstance<TInterface>(proxyGenerator, actual, interceptors);
+                
+                return proxy;
             });
         }
     }

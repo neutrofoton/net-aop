@@ -4,7 +4,7 @@ namespace NetAOP.WebApi.Interceptors
 {
     public class LoggingInterceptor : IInterceptor
     {
-        private readonly ILogger<LoggingInterceptor> logger;
+        private readonly ILogger logger;
 
         public LoggingInterceptor(ILogger<LoggingInterceptor> logger)
         {
@@ -13,7 +13,7 @@ namespace NetAOP.WebApi.Interceptors
 
         public void Intercept(IInvocation invocation)
         {   
-            logger.LogDebug($"Calling method: {invocation.Method.ReturnType} - {invocation.TargetType}.{invocation.Method.Name}");
+            logger.LogDebug($"[LoggingInterceptor] -> Calling method: {invocation.Method.ReturnType} - {invocation.TargetType}.{invocation.Method.Name}");
             invocation.Proceed();
         }
     }

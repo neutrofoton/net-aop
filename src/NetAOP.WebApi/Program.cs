@@ -3,7 +3,7 @@ using Castle.DynamicProxy;
 using NetAOP.WebApi.Interceptors;
 using NetAOP.WebApi.Services;
 using NetAOP.WebApi.Services.Impl;
-using NetAOP.WebApi.Extensions;
+using NetAOP.WebApi.Aop;
 
 var builder = WebApplication.CreateBuilder(args);
 
