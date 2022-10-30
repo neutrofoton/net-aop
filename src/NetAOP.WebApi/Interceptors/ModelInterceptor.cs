@@ -7,8 +7,6 @@ namespace NetAOP.WebApi.Interceptors
     {
         public void Intercept(IInvocation invocation)
         {
-
-
             var method = invocation.Method.Name;
 
             if (method.StartsWith("set_"))

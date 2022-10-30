@@ -5,14 +5,14 @@ namespace NetAOP.WebApi.Aop
 {
     public class ProxyFactory 
     {
-        public static TInterface? GetProxiedInstance<TInterface>(IProxyGenerator proxyGenerator, TInterface source, params IInterceptor[] interceptors) where TInterface : class
+        public static T? GetProxiedInstance<T>(IProxyGenerator proxyGenerator, T source, params IInterceptor[] interceptors) where T : class
         {
-            TInterface? proxy = null;
+            T? proxy = null;
 
-            if (typeof(TInterface).IsInterface)
-                proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), source, interceptors) as TInterface;
+            if (typeof(T).IsInterface)
+                proxy = proxyGenerator.CreateInterfaceProxyWithTarget(typeof(T), source, interceptors) as T;
             else
-                proxy = proxyGenerator.CreateClassProxyWithTarget(typeof(TInterface), source, interceptors) as TInterface;
+                proxy = proxyGenerator.CreateClassProxyWithTarget(typeof(T), source, interceptors) as T;
 
             return proxy;
         }

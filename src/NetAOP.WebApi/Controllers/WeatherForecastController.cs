@@ -91,18 +91,14 @@ namespace NetAOP.WebApi.Controllers
         [HttpGet("DoClassInterceptor")]
         public List<ChangeTracer> DoClassInterceptor()
         {
-            var person = ProxyFactory.GetProxiedInstance<Person>(
-                    new ProxyGenerator(),
-                    new Person() { Id=1, Name="my name"},
-                    new IInterceptor[]
-                    {
-                        new ModelInterceptor()
-
-                    });
+            var person = new Person() { Id = 1, Name = "my name" };
+            person = person.ApplyModelTracer();
 
             person.Name = "My Name modified";
+            person.Name = "My Name modified again";
+            person.Id = 77;
 
-            foreach(var change in person.PropertyChangeList)
+            foreach (var change in person.PropertyChangeList)
             {
                 this._logger.LogDebug($"{change.Field}");
             }
