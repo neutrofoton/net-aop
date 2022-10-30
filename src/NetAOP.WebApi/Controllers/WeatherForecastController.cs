@@ -89,7 +89,7 @@ namespace NetAOP.WebApi.Controllers
         }
 
         [HttpGet("DoClassInterceptor")]
-        public string DoClassInterceptor()
+        public List<ChangeTracer> DoClassInterceptor()
         {
             var person = ProxyFactory.GetProxiedInstance<Person>(
                     new ProxyGenerator(),
@@ -107,7 +107,7 @@ namespace NetAOP.WebApi.Controllers
                 this._logger.LogDebug($"{change.Field}");
             }
 
-            return "done";
+            return person.PropertyChangeList;
         }
     }
 }

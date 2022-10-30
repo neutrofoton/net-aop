@@ -7,26 +7,38 @@ namespace NetAOP.WebApi.Interceptors
     {
         public void Intercept(IInvocation invocation)
         {
-            invocation.Proceed();
+
 
             var method = invocation.Method.Name;
 
             if (method.StartsWith("set_"))
             {
-                var field = method.Replace("set_", "");
+                var field = method.Replace("set_", string.Empty);
+
+                //var actual = ProxyUtil.GetUnproxiedInstance(invocation.Proxy) as IModel;
                 var proxy = invocation.Proxy as IModel;
 
-                //var model = ProxyUtil.GetUnproxiedInstance(proxy) as IModel;
+                var pi = proxy!.GetType().GetProperty(field);
 
-                if (proxy != null)
+                ChangeTracer tracer = new ChangeTracer()
                 {
-                    proxy.PropertyChangeList.Add(new ChangeTracer()
-                    {
-                        Field = field
-                    });
-                }
+                    Field = field,
+                    OldValue = pi!.GetValue(proxy)
+                }; 
 
+                invocation.Proceed();
+
+                tracer.NewValue = pi.GetValue(proxy);
+                proxy.PropertyChangeList.Add(tracer);
             }
-        }
+            else
+            {
+                invocation.Proceed();
+            }
+
+    }
+
+            
+        
     }
 }
