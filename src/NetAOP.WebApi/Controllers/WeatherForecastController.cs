@@ -16,10 +16,10 @@ namespace NetAOP.WebApi.Controllers
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger _logger;
+        private readonly ILogger<HelloService> _logger;
         private readonly IHelloService helloService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IHelloService helloService)
+        public WeatherForecastController(ILogger<HelloService> logger, IHelloService helloService)
         {
             _logger = logger;
             this.helloService = helloService;
@@ -66,10 +66,13 @@ namespace NetAOP.WebApi.Controllers
         {
             string note = ProxyFactory.GetProxiedInstance<IHelloService>(
                     new ProxyGenerator(),
-                    new HelloService(), new IInterceptor[]
+                    new HelloService(_logger), 
+                    new IInterceptor[]
                     {
+                        //the order on this array defines the interceptor call order.
                         new ConsoleAInterceptor(_logger),
                         new ConsoleBInterceptor(_logger)
+                        
                     }).Hi();
 
             var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast

@@ -11,8 +11,9 @@ namespace NetAOP.WebApi.Interceptors
         }
         public void Intercept(IInvocation invocation)
         {
-            logger.LogDebug($"[ConsoleAInterceptor] -> Calling method: {invocation.Method.ReturnType} - {invocation.TargetType}.{invocation.Method.Name}");
+            logger.LogDebug($"[ConsoleAInterceptor] -> Before Calling method: {invocation.Method.ReturnType} - {invocation.TargetType}.{invocation.Method.Name}");
             invocation.Proceed();
+            logger.LogDebug($"[ConsoleAInterceptor] -> After Calling method: {invocation.Method.ReturnType} - {invocation.TargetType}.{invocation.Method.Name}");
         }
     }
 }
