@@ -2,6 +2,7 @@ using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Mvc;
 using NetAOP.WebApi.Aop;
 using NetAOP.WebApi.Interceptors;
+using NetAOP.WebApi.Model;
 using NetAOP.WebApi.Services;
 using NetAOP.WebApi.Services.Impl;
 
@@ -73,7 +74,7 @@ namespace NetAOP.WebApi.Controllers
                         new ConsoleAInterceptor(_logger),
                         new ConsoleBInterceptor(_logger)
                         
-                    }).Hi();
+                    })!.Hi();
 
             var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -85,6 +86,28 @@ namespace NetAOP.WebApi.Controllers
             .ToArray();
 
             return result;
+        }
+
+        [HttpGet("DoClassInterceptor")]
+        public string DoClassInterceptor()
+        {
+            var person = ProxyFactory.GetProxiedInstance<Person>(
+                    new ProxyGenerator(),
+                    new Person() { Id=1, Name="my name"},
+                    new IInterceptor[]
+                    {
+                        new ModelInterceptor()
+
+                    });
+
+            person.Name = "My Name modified";
+
+            foreach(var change in person.PropertyChangeList)
+            {
+                this._logger.LogDebug($"{change.Field}");
+            }
+
+            return "done";
         }
     }
 }

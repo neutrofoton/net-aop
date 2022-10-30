@@ -3,8 +3,6 @@ using NetAOP.WebApi.Model;
 
 namespace NetAOP.WebApi.Interceptors
 {
-    
-
     public class ModelInterceptor : IInterceptor
     {
         public void Intercept(IInvocation invocation)
@@ -22,8 +20,12 @@ namespace NetAOP.WebApi.Interceptors
 
                 if (proxy != null)
                 {
-                    proxy.PropertyChangeList.Add(field);
+                    proxy.PropertyChangeList.Add(new ChangeTracer()
+                    {
+                        Field = field
+                    });
                 }
+
             }
         }
     }
