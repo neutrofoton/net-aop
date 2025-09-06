@@ -105,5 +105,31 @@ namespace NetAOP.WebApi.Controllers
 
             return person.PropertyChangeList;
         }
+
+        [HttpGet("DoMultiInterceptors")]
+        public IEnumerable<WeatherForecast> DoMultiInterceptors2()
+        {
+            string note = ProxyFactory.GetProxiedInstance<IHelloService>(
+                    new ProxyGenerator(),
+                    new HelloService(_logger), 
+                    new IInterceptor[]
+                    {
+                        //the order on this array defines the interceptor call order.
+                        new ConsoleAInterceptor(_logger),
+                        new ConsoleBInterceptor(_logger)
+                        
+                    })!.Hi();
+
+            var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)],
+                Note = note
+            })
+            .ToArray();
+
+            return result;
+        }
     }
 }

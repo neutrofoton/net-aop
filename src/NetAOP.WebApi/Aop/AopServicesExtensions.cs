@@ -19,5 +19,19 @@ namespace NetAOP.WebApi.Aop
                 return proxy;
             });
         }
+
+        public static void AddProxiedScoped(this IServiceCollection services, 
+            Type interfaceType, Type implementationType)
+        { 
+            services.AddScoped(interfaceType, serviceProvider =>
+            {
+                var proxyGenerator = serviceProvider.GetRequiredService<ProxyGenerator>();
+                var actual = serviceProvider.GetRequiredService(implementationType);
+                var interceptors = serviceProvider.GetServices<IInterceptor>().ToArray();
+                var proxy = ProxyFactory.GetProxiedInstance(proxyGenerator, actual, interceptors);
+                
+                return proxy!;
+            });
+        }
     }
 }

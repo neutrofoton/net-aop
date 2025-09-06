@@ -4,6 +4,7 @@ using NetAOP.WebApi.Interceptors;
 using NetAOP.WebApi.Services;
 using NetAOP.WebApi.Services.Impl;
 using NetAOP.WebApi.Aop;
+using NetAOP.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IInterceptor, LoggingInterceptor>();
 
 //Register services
 builder.Services.AddProxiedScoped<IHelloService, HelloService>();
+builder.Services.AddProxiedScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
 
 var app = builder.Build();
 
